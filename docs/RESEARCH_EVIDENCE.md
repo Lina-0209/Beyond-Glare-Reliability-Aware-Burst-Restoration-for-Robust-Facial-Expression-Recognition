@@ -38,7 +38,7 @@ E008  3b75891fc2f738c4a36a4ba28cbb42eaad6c79f568126c1bcfce5f8486c421aa
 
 | Claim | README section / purpose | Evidence |
 |---|---|---|
-| C001 | Abstract: design and Strong-glare downstream gains | E001, E002 |
+| C001 | Full-project abstract: lightweight BERR, LensGlare-4, frozen FER, confidence/contract adaptation, group learning-platform integration boundary, and Strong-glare gains | E001, E002, E004–E007 |
 | C002 | Contributions: architecture, dataset scale and paired validation | E001–E006 |
 | C003 | Methodology: five stages, dimensions, reliability and training objective | E005 |
 | C004 | Experiment protocol: cohort, coverage, scale, frozen models and scoring | E001, E002 |

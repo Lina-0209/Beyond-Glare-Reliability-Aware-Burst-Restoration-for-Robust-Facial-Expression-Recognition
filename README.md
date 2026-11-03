@@ -20,22 +20,26 @@ separate components.
 
 ## Abstract
 
-Eyeglass glare obscures the eye region that facial expression recognition (FER)
-depends on. A single observation cannot directly access facial detail visible in
-another frame, while uniform burst averaging does not distinguish clear evidence
-from glare. We present **Burst Eyeglass Reflection Removal (BERR)**, a four-to-one
-restoration network that aligns the eyeglass region, estimates spatial degradation,
-and aggregates multi-scale features according to their reliability. A dual-head
-decoder combines visible-evidence reconstruction with a learned prior, and local
-composition preserves the anchor frame outside the restoration region. In a paired
-RAF-DB RGB synthetic-glare evaluation with **2,824 faces**, BERR improves Strong-glare
-Accuracy / Macro-F1 over direct recognition by **+2.37 / +2.66 percentage points**
-with enet_b2_7 and **+2.94 / +3.16 points** with POSTER V2. It also outperforms
-matched-resolution single-frame NAFNet and aligned-four-frame-mean + NAFNet on both
-metrics with both recognizers, without retraining the restoration or FER models
-for this evaluation. These results establish the downstream value of BERR's
-burst-restoration design under the evaluated synthetic-glare protocol.
-<!-- claim:C001 evidence:E001,E002 -->
+Eyeglass glare obscures facial cues used by camera-based expression recognition,
+motivating a compact restoration front end for emotion-aware learning systems.
+We present **Beyond Glare**, a facial perception project designed for the group's
+**emotion-aware STEM learning platform**, centered on **Burst Eyeglass Reflection
+Removal (BERR)**: a lightweight four-frame convolutional network with **1,003,847
+parameters (~1.00M)**. BERR aligns eyeglass regions, extracts shared multi-scale
+features, and fuses complementary observations according to their spatial
+reliability. Visible/prior decoding and local composition restore the affected
+region while preserving the anchor context. We construct **LensGlare-4**, comprising
+**2,243 synthetic four-frame bursts** with clean-source-disjoint splits for
+restoration training and evaluation. For application integration, the project
+combines frozen facial expression recognition (FER), confidence-based rejection,
+and rule-based five-state contract adaptation to supply visual cues for backend
+text/face fusion, teaching feedback, and learning reports. Integration distinguishes
+the existing single-image direct-FER service from the BERR-enabled route, which
+requires a four-frame request extension. In a paired RAF-DB RGB evaluation on
+**2,824 faces** under synthetic Strong glare, BERR improves Accuracy / Macro-F1
+over direct FER by **+2.37 / +2.66 percentage points** with enet_b2_7 and
+**+2.94 / +3.16 points** with POSTER V2, with all evaluated model weights fixed.
+<!-- claim:C001 evidence:E001,E002,E004,E005,E006,E007 -->
 
 ## Pipeline
 
