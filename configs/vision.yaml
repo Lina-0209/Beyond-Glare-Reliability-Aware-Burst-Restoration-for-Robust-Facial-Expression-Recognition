@@ -1,0 +1,39 @@
+device: cuda
+
+berr:
+  # Source-level 80/10/10 retraining; best selected on validation only.
+  checkpoint: checkpoints/berr.pt
+  config: configs/berr/combined.yaml
+  num_frames: 4
+  image_size: 256
+  roi_size: 128
+  face_landmarker: assets/face_landmarker.task
+  glare_presence_threshold: 0.05
+  # Detect once on the anchor and reuse geometry over the short four-frame burst.
+  reuse_anchor_landmarks: true
+  # Enable only for a continuous video stream; the demo enables and resets it explicitly.
+  geometry_cache_enabled: false
+  geometry_cache_max_age: 4
+  geometry_cache_motion_threshold: 0.08
+
+fer:
+  model: enet_b2_7
+  # ONNX avoids downgrading the project's existing timm installation.
+  engine: onnx
+
+vision:
+  emotion_confidence_threshold: 0.60
+  confidence_policy: artifacts/fer_confidence_policy_v1.json
+  emotion_margin_threshold: 0.0
+  restoration_confidence_drop_threshold: -0.05
+  # Audit pre/post-restoration confidence periodically in always_restore streams.
+  # Auto mode still computes the comparison on every restore route in parallel with its gate.
+  compare_pre_restore_fer: true
+  pre_restore_fer_interval: 4
+  parallel_gate_fer: true
+  # Frozen validation default: preserves the existing API behavior.
+  mode: always_restore
+
+glare_gate:
+  enabled: false
+  model_path: checkpoints/fast_glare_gate.pkl

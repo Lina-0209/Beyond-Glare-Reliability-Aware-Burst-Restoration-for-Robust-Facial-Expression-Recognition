@@ -1,0 +1,16 @@
+name: offline-tests
+on: [push, pull_request]
+jobs:
+  tests:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.10'
+          cache: pip
+      - run: sudo apt-get update && sudo apt-get install -y libgl1 libglib2.0-0 libportaudio2
+      - run: pip install torch==2.10.0 torchvision==0.25.0 --index-url https://download.pytorch.org/whl/cpu
+      - run: pip install -r requirements-dev.txt
+      - run: OMP_NUM_THREADS=1 MKL_NUM_THREADS=1 pytest -q
+      - run: python scripts/check_release.py

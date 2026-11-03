@@ -1,0 +1,41 @@
+project_name: berr_smoke
+seed: 42
+output_root: outputs/smoke
+dataset:
+  image_size: 64
+  roi_size: 32
+  burst_length: 4
+  strict_burst_length: true
+model:
+  roi_size: 32
+  width: 4
+  encoder_blocks: [1, 1, 1]
+  decoder_blocks: [1, 1]
+  reliability_temperature: 0.15
+  use_offset_head: false
+  max_residual_flow: 4.0
+  feather_pixels: 3
+loss_weights:
+  roi: 1.0
+  full: 0.5
+  ssim: 0.2
+  mask: 0.5
+  visible: 0.25
+  prior: 0.25
+  outside: 0.2
+  alignment: 0.1
+  flow_smooth: 0.01
+train:
+  epochs: 1
+  batch_size: 1
+  num_workers: 0
+  learning_rate: 0.0002
+  weight_decay: 0.0001
+  grad_clip: 1.0
+  log_interval: 1
+eval:
+  batch_size: 1
+  num_workers: 0
+  max_batches: 1
+dry_run:
+  num_samples: 2

@@ -1,0 +1,140 @@
+# Research evidence and display provenance
+
+This record binds the research introduction in both READMEs to the project's
+recorded experiments. It contains aggregate results and source hashes, not face
+images, person-level records, datasets, checkpoints, or prediction caches.
+README claims C001–C007 are cross-referenced in HTML comments; each claim group
+covers the preceding section. This is a repository overview, not a submitted paper
+or a claim of compliance with any particular venue's author instructions.
+
+## Sources
+
+The following original experiment records are retained in the research workspace,
+not bundled in this code release. Paths below are workspace-relative identifiers,
+not downloadable public assets. Hashes identify the exact records used here.
+
+| ID | Original record | Supporting location |
+|---|---|---|
+| E001 | `outputs/rafdb_cross_backbone_v1/FROZEN_PROTOCOL.json` | Frozen post-hoc protocol, inputs, source cohort, model identities, preprocessing and analysis settings. |
+| E002 | `outputs/rafdb_cross_backbone_v1/summary.json` | `requested_test_samples`, `complete_paired_samples`, `coverage`, `metrics`, `comparisons`. |
+| E003 | `outputs/final_validation_resplit/frame_ablation.json` | `results.celeb` and `results.ffhq`: fixed-checkpoint 1F/2F/4F metrics. |
+| E004 | `outputs/final_validation_resplit/resplit_summary.json` | `split` and `berr.parameters`. |
+| E005 | Included model implementation | [model](../models/berr/model.py), [encoder](../models/berr/backbone.py), [degradation/fusion](../models/berr/degradation.py), [decoder](../models/berr/restoration.py), [losses](../models/berr/losses.py), [configuration](../configs/berr/combined.yaml). |
+| E006 | `outputs/final_validation_resplit/dataset_split.csv` | Per-domain and combined source/burst counts for every split. |
+
+```text
+E001  0c14db58e6a3f4aca8cfbe8656c6413b52a060c234d44fbe56e6ce04958495da
+E002  211bd5dcfc78a3aa2d46777020a1fdda40a4f1a4a74a1c7246b70774cf762ade
+E003  217f6bdb5faf64a8899620d4c9a7e7aa23c3bc2b94d6d7b188b4747b3e0d69a2
+E004  697be6c2724039f4d9be5b66eae3e2889318e84e42461f15a22ac52abcc0fd61
+E006  88072f05a3fca2ddfa0ca58203ea5472ef50b76090a533f0822a3fd31dc56db6
+```
+
+| Claim | README section / purpose | Evidence |
+|---|---|---|
+| C001 | Abstract: design and Strong-glare downstream gains | E001, E002 |
+| C002 | Contributions: architecture, dataset scale and paired validation | E001–E006 |
+| C003 | Methodology: five stages, dimensions, reliability and training objective | E005 |
+| C004 | Experiment protocol: cohort, coverage, scale, frozen models and scoring | E001, E002 |
+| C005 | Cross-recognizer trends, Strong table, paired intervals and tests | E002 |
+| C006 | Strong utility and the aligned-mean system-level comparison | E001, E002, E005 |
+| C007 | Fixed-checkpoint temporal-evidence experiment | E003, E004, E006 |
+
+## Evaluation definitions
+
+- This is a **post-hoc frozen-model extension**. No restoration/FER retraining,
+  test-threshold calibration, or synthesis-parameter selection is performed for it.
+- RAF-DB official test: 3,068 images. Historical detected cohort: 2,824. All selected
+  paths, backbones, and severities complete this same cohort. The 244 `no_face`
+  cases remain in the coverage denominator; the reported Accuracy/Macro-F1 are
+  conditional on the common cohort, not full-test end-to-end accuracy.
+- Native input: 100 × 100 RGB. Glare is synthesized deterministically in the lens
+  region. Clean-derived synthetic geometry is shared with the recorded protocol;
+  these results do not measure landmark detection on real glare video.
+- Direct: native glare anchor. NAFNet: one anchor enlarged to 256 × 256 using OpenCV
+  bilinear interpolation, then restored. Mean + NAFNet: four similarly enlarged
+  frames, BERR's landmark similarity alignment and bilinear/border sampling,
+  full-face equal-weight RGB average, one uint8 quantization, then the same NAFNet.
+  BERR: four 256 × 256 frames, internal 128 × 128 ROI and local composition.
+- The NAFNet advantage statements concern the **matched 256 × 256 restoration
+  inputs**, not every possible NAFNet input scale or image-reconstruction metric.
+  Reliability weighting, ROI processing, decoding, and composition all distinguish
+  BERR from the mean baseline; the comparison does not isolate one module's effect.
+- Both backbones consume identical cached PNG pixels per condition. enet_b2_7 and
+  POSTER V2 use the recorded AffectNet-7 weights and preprocessing, not RAF-DB-trained
+  replacements. The POSTER label crosswalk is the project's recorded mapping; see
+  [third-party boundaries](../THIRD_PARTY_NOTICES.md).
+- Seven-class top-1 Accuracy and class-unweighted Macro-F1 use every paired
+  prediction with rejection disabled. These are not five-level learning-state
+  metrics or confidence-selected accuracy. Clean references are point estimates,
+  not theoretical upper bounds.
+- Differences are computed before rounding. All reported differences use
+  **percentage points (pp)**, not relative percentage improvements.
+- Intervals: 5,000 source-paired percentile-bootstrap resamples, 95%, **unadjusted
+  per comparison**. Accuracy tests: two-sided exact McNemar, Holm-adjusted separately
+  within each comparison family of two backbones × three severities (six tests).
+  Statistical support for Strong does not assert significance at every severity.
+- Frame-evidence evaluation uses one frozen BERR on the 226 source-disjoint test
+  bursts (152 CelebAMaskHQ-derived / 74 FFHQ-derived). It repeats 1 or 2 observations
+  to preserve four input slots. The dataset split is clean-source-disjoint; no
+  independently verified person-identity-disjoint claim is made.
+- LensGlare-4: 1,792 / 225 / 226 training/validation/test bursts from 487 / 61 / 62
+  clean sources. Total: 2,243 four-frame bursts, 8,972 frames, 610 sources.
+  Naming the dataset does not imply that its images are publicly distributed.
+
+## Full-strength main-path point estimates
+
+All rows use the same n = 2,824. Units are percentages. These values are transcribed
+from E002; the plots retain all main paths, including negative gains from averaging.
+
+| Strength | Path | enet Accuracy | enet Macro-F1 | POSTER V2 Accuracy | POSTER V2 Macro-F1 |
+|---|---|---:|---:|---:|---:|
+| Mild | Direct | 76.35 | 63.02 | 75.04 | 62.00 |
+| Mild | NAFNet | 76.59 | 63.66 | 75.50 | 62.70 |
+| Mild | Mean + NAFNet | 75.50 | 62.13 | 74.89 | 61.52 |
+| Mild | BERR | 77.02 | 64.21 | 75.92 | 63.26 |
+| Medium | Direct | 75.60 | 62.41 | 73.48 | 60.46 |
+| Medium | NAFNet | 76.20 | 62.93 | 74.61 | 61.78 |
+| Medium | Mean + NAFNet | 74.33 | 61.00 | 73.87 | 60.84 |
+| Medium | BERR | 76.88 | 63.87 | 76.10 | 63.46 |
+| Strong | Direct | 74.47 | 60.95 | 73.12 | 60.01 |
+| Strong | NAFNet | 75.67 | 62.41 | 74.29 | 61.37 |
+| Strong | Mean + NAFNet | 73.34 | 59.54 | 73.48 | 60.42 |
+| Strong | BERR | 76.84 | 63.61 | 76.06 | 63.17 |
+
+## Display provenance
+
+Both figures are **unmodified copies of existing project plots**, not new analyses.
+They contain aggregate charts, not source photographs. Original source: E002 and
+the corresponding `results.csv`; original rendering/provenance is retained in
+`outputs/rafdb_cross_backbone_v1/`. The blue revision is retained in its
+`figure_revisions/20261029/` subdirectory. No cropping, panel removal, recoloring,
+resampling, or PDF export is performed for this README update.
+
+| Display | Bundled file | Version / encoding | SHA256 |
+|---|---|---|---|
+| Figure 1 / project Fig. 6d | `figures/fig06d_rafdb_four_paths_two_fer.png` | Original four-path, dual-FER severity curves; point estimates with clean references | `beda1a4dcc6937e557ba486b4d3d85678fa646daf7117da895343c54c4d00255` |
+| Figure 2 / project Fig. 6e | `figures/fig06e_rafdb_strong_utility_heatmap.png` | User-approved 2026-10-29 blue revision; signed pp gains; independent panel scales | `29383f7243b19ebc9160e8be297bf4be2e3506f40f4abcec5c4014e8d9b739c3` |
+
+Creator attribution: existing project experiment/plotting workflow; no new human
+creator attribution is inferred. Permission scope: reuse in this repository's
+documentation was requested by the project owner. Source-dataset/model terms remain
+separate from the project code's MIT license. Confirm public redistribution and
+institutional/group requirements before GitHub publication.
+
+Automated checks compare README numbers with the recorded JSON, check local links,
+and bind figure files by SHA256. Original scientific human-review status remains
+**pending**; no human verifier or submission approval is inferred from these checks.
+The portable code can run a new authorized experiment, but exact replay of the
+recorded cohort requires its original manifests, data, and checkpoints, which are
+not distributed here. No new experiment is run for this documentation update.
+
+## Documentation workflow reference
+
+AI-assisted drafting and evidence bookkeeping used the scientific-writing skill;
+figure checks used paper-visualization. These are documentation aids, not sources
+of model-performance evidence or method novelty. Human owners retain final review.
+
+Kassis, T., Agarwal, V., He, Y., Patel, D., & Brueckner, A. M. (2026).
+*Scientific Agent Skills: A Library of Procedural Knowledge for Research Agents.*
+[arXiv:2609.00065](https://arxiv.org/abs/2609.00065).

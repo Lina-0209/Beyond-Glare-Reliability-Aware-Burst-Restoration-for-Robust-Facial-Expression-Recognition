@@ -1,0 +1,11 @@
+canonical_labels: [angry, disgust, fear, happy, neutral, sad, surprise]
+
+datasets:
+  rafdb_basic:
+    "1": surprise
+    "2": fear
+    "3": disgust
+    "4": happy
+    "5": sad
+    "6": angry
+    "7": neutral

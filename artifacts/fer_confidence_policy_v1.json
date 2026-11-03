@@ -1,0 +1,20 @@
+{
+  "version": 1,
+  "default_confidence_threshold": 0.4135381760413705,
+  "class_thresholds": {
+    "angry": 0.9006823438630238,
+    "disgust": 0.8546356581597798,
+    "fear": 0.8744889074761721,
+    "happy": 0.0,
+    "neutral": 0.4135381760413705,
+    "sad": 0.0,
+    "surprise": 0.0
+  },
+  "margin_threshold": 0.0,
+  "restoration_confidence_drop_threshold": -0.05,
+  "metadata": {
+    "calibration_dataset": "RAF-DB Basic Emotion official train split",
+    "frozen_fer": "EmotiEffLib/enet_b2_7",
+    "scope": "Historical selective-prediction policy; not calibrated five-state probabilities or a guarantee on new data. Private paths and historical result tables were removed for release."
+  }
+}

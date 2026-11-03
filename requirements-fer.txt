@@ -1,0 +1,5 @@
+-r requirements.txt
+onnx==1.22.0
+onnxruntime==1.23.2
+# Separately: pip install --no-deps emotiefflib==1.1.1
+# Reuse opencv-contrib-python rather than installing a second cv2 distribution.
