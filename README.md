@@ -6,8 +6,17 @@ Model: **BERR** · Synthetic dataset: **LensGlare-4**
 
 [中文](README.zh-CN.md)
 
-> **Recover expression evidence, not just image appearance.** Four-frame eyeglass-glare
-> restoration with a ~1M-parameter network and downstream gains on two frozen FER models.
+> **A lightweight eyeglass-glare removal network for robust facial expression recognition.**
+> Recover expression evidence, not just image appearance.
+
+**BERR is a compact four-frame convolutional restoration network with 1,003,847
+parameters (~1.00M).** It shares one NAF-style encoder across frames, fuses evidence
+according to spatial reliability, and restores a **128 × 128 eyeglass ROI** before
+composing it back into the anchor image. This concentrates learned restoration on
+the glare-affected region while preserving the surrounding face. The parameter
+count is for BERR itself; the frozen FER recognizer and landmark detector are
+separate components.
+<!-- claim:C008 evidence:E004,E005 -->
 
 ## Abstract
 
@@ -27,6 +36,18 @@ metrics with both recognizers, without retraining the restoration or FER models
 for this evaluation. These results establish the downstream value of BERR's
 burst-restoration design under the evaluated synthetic-glare protocol.
 <!-- claim:C001 evidence:E001,E002 -->
+
+## Pipeline
+
+![Four-frame RGB burst passes through landmark alignment, BERR restoration, local ROI composition, and a frozen seven-class FER recognizer.](docs/figures/fig01_pipeline.png)
+
+*BERR-enabled inference pipeline.* Four observations are aligned to an anchor,
+restored through shared encoding and reliability fusion, and locally composed
+before frozen FER. ROI reconstruction/composition is part of BERR, displayed as a
+separate logical stage. This figure shows the four-frame research path; the group's
+existing single-JPEG interface and the burst integration route are distinguished
+[below](#integration-into-the-group-learning-platform).
+<!-- claim:C010 evidence:E005,E008 -->
 
 ## Contributions
 
@@ -62,6 +83,34 @@ degradation across all frames mixes the visible and prior reconstructions.
 Training uses image-reconstruction and degradation-mask supervision; the downstream
 FER is frozen and is not part of the restoration training objective.
 <!-- claim:C003 evidence:E005 -->
+
+## Integration into the group learning platform
+
+The facial module provides one visual signal for the group's emotion-aware STEM
+learning platform. The application backend combines this signal with text emotion;
+teaching-strategy and report-generation modules consume the resulting records.
+
+- **Capture and call.** On a learning interaction, the frontend sends a camera JPEG
+  to the group backend, which calls the deployment-specific `POST /recognize` service.
+- **Recognize and adapt.** The service detects/crops a face, runs frozen FER, applies
+  confidence rejection, and maps accepted seven-class predictions to the group's
+  five-state contract, returning `emotion` and `confidence`. The five-state mapping
+  is an engineering adapter, not a separately trained learning-state classifier;
+  confidence refers to the FER prediction.
+- **Fuse and consume.** The backend handles text/face fusion, database writes,
+  teaching strategies, and reports. On no-face, rejected, or failed facial results,
+  the integration contract calls for `facial_value = null` and text-only fallback.
+
+**Where BERR fits.** The current single-JPEG contract uses **direct FER, without
+BERR**. To enable the pipeline above, extend capture/upload to carry **four distinct,
+consecutive frames from the same student interaction** in one request; a burst-capable
+adapter then runs preprocessing → BERR → FER → confidence assessment → contract
+mapping. Do not duplicate one image or accumulate frames across learning events.
+The public [four-frame demo](demo_vision.py) and [video demo](demo_video.py) provide
+the research inference path. The group-specific HTTP adapter, mapping, and backend
+infrastructure are maintained outside this research-code release; this section
+documents the integration boundary rather than introducing a new HTTP endpoint.
+<!-- claim:C009 evidence:E005,E007 -->
 
 ## Experiments
 

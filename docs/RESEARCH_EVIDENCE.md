@@ -3,7 +3,7 @@
 This record binds the research introduction in both READMEs to the project's
 recorded experiments. It contains aggregate results and source hashes, not face
 images, person-level records, datasets, checkpoints, or prediction caches.
-README claims C001–C007 are cross-referenced in HTML comments; each claim group
+README claims C001–C010 are cross-referenced in HTML comments; each claim group
 covers the preceding section. This is a repository overview, not a submitted paper
 or a claim of compliance with any particular venue's author instructions.
 
@@ -21,6 +21,8 @@ not downloadable public assets. Hashes identify the exact records used here.
 | E004 | `outputs/final_validation_resplit/resplit_summary.json` | `split` and `berr.parameters`. |
 | E005 | Included model implementation | [model](../models/berr/model.py), [encoder](../models/berr/backbone.py), [degradation/fusion](../models/berr/degradation.py), [decoder](../models/berr/restoration.py), [losses](../models/berr/losses.py), [configuration](../configs/berr/combined.yaml). |
 | E006 | `outputs/final_validation_resplit/dataset_split.csv` | Per-domain and combined source/burst counts for every split. |
+| E007 | Original deployment adapter and project integration record (not bundled) | `emotion_service.py`: single-JPEG `POST /recognize`; `vision_module/group_emotion_adapter.py`: face crop, rejection, seven-to-five mapping and public response; `docs/PROJECT_OVERVIEW_CN.md` §11: backend responsibilities and the four-frame extension boundary. |
+| E008 | Existing project pipeline diagram | `docs/figures/fig01_pipeline.png`, copied unchanged; logical stages checked against E005. |
 
 ```text
 E001  0c14db58e6a3f4aca8cfbe8656c6413b52a060c234d44fbe56e6ce04958495da
@@ -28,6 +30,10 @@ E002  211bd5dcfc78a3aa2d46777020a1fdda40a4f1a4a74a1c7246b70774cf762ade
 E003  217f6bdb5faf64a8899620d4c9a7e7aa23c3bc2b94d6d7b188b4747b3e0d69a2
 E004  697be6c2724039f4d9be5b66eae3e2889318e84e42461f15a22ac52abcc0fd61
 E006  88072f05a3fca2ddfa0ca58203ea5472ef50b76090a533f0822a3fd31dc56db6
+E007 emotion_service.py  e8afedf999c92c96aff0772e747f4d5abeb1e1cbb6fe4b4896099e7bd919f6ad
+E007 group_emotion_adapter.py  2a984fda8e3303410dd8b06882169aa388c47ddd6512ba21a25176e8772b9d6f
+E007 PROJECT_OVERVIEW_CN.md  3360bba2c63cb1b346f01d8180216a373de91965ad3453d55e43c154cc8ee569
+E008  3b75891fc2f738c4a36a4ba28cbb42eaad6c79f568126c1bcfce5f8486c421aa
 ```
 
 | Claim | README section / purpose | Evidence |
@@ -39,6 +45,18 @@ E006  88072f05a3fca2ddfa0ca58203ea5472ef50b76090a533f0822a3fd31dc56db6
 | C005 | Cross-recognizer trends, Strong table, paired intervals and tests | E002 |
 | C006 | Strong utility and the aligned-mean system-level comparison | E001, E002, E005 |
 | C007 | Fixed-checkpoint temporal-evidence experiment | E003, E004, E006 |
+| C008 | Lightweight eyeglass-glare removal: 1,003,847 BERR parameters, shared CNN, local ROI; downstream FER/detector excluded from the count | E004, E005 |
+| C009 | Group learning-platform integration: documented single-JPEG contract, backend fusion/records, contract mapping and required burst extension | E005, E007 |
+| C010 | Four-frame inference pipeline and logical ROI-composition stage | E005, E008 |
+
+The BERR parameter count was also checked by constructing the default model and
+summing `p.numel()` over `model.parameters()`: **1,003,847**. This is a structural
+count, not an end-to-end memory, latency, or real-time performance benchmark.
+The group integration section describes the recorded contract and an explicit
+four-frame extension route; it does not claim new deployment validation, automatic
+BERR execution for single JPEGs, or validated five-level learning-state accuracy.
+No group service implementation, credentials, hostnames, or infrastructure files
+are added to the public release.
 
 ## Evaluation definitions
 
@@ -104,7 +122,7 @@ from E002; the plots retain all main paths, including negative gains from averag
 
 ## Display provenance
 
-Both figures are **unmodified copies of existing project plots**, not new analyses.
+The two result figures are **unmodified copies of existing project plots**, not new analyses.
 They contain aggregate charts, not source photographs. Original source: E002 and
 the corresponding `results.csv`; original rendering/provenance is retained in
 `outputs/rafdb_cross_backbone_v1/`. The blue revision is retained in its
@@ -113,8 +131,15 @@ resampling, or PDF export is performed for this README update.
 
 | Display | Bundled file | Version / encoding | SHA256 |
 |---|---|---|---|
+| Pipeline / project Fig. 1 | `figures/fig01_pipeline.png` | Original logical four-frame BERR + frozen FER pipeline; unchanged PNG, no face photographs | `3b75891fc2f738c4a36a4ba28cbb42eaad6c79f568126c1bcfce5f8486c421aa` |
 | Figure 1 / project Fig. 6d | `figures/fig06d_rafdb_four_paths_two_fer.png` | Original four-path, dual-FER severity curves; point estimates with clean references | `beda1a4dcc6937e557ba486b4d3d85678fa646daf7117da895343c54c4d00255` |
 | Figure 2 / project Fig. 6e | `figures/fig06e_rafdb_strong_utility_heatmap.png` | User-approved 2026-10-29 blue revision; signed pp gains; independent panel scales | `29383f7243b19ebc9160e8be297bf4be2e3506f40f4abcec5c4014e8d9b739c3` |
+
+The pipeline is reused from the original `docs/figures/fig01_pipeline.png` under
+the user's request to include the project pipeline. It is a schematic, not a
+quantitative result or a new method drawing. The README caption identifies it as
+the BERR-enabled research path and directs readers to the separate group-contract
+description. No new image rendering or style conversion is performed.
 
 Creator attribution: existing project experiment/plotting workflow; no new human
 creator attribution is inferred. Permission scope: reuse in this repository's

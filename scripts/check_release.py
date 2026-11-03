@@ -9,8 +9,9 @@ ROOT = Path(__file__).resolve().parents[1]
 SKIP_DIRS = {".git", ".venv", "venv", "__pycache__", ".pytest_cache"}
 PRIVATE_DIRS = {"data", "prepared_data", "outputs", "checkpoints", "assets", "third_party"}
 SUFFIXES = {".py", ".yaml", ".yml", ".json", ".md", ".txt"}
-# Explicitly registered aggregate documentation plots, not a general image allowance.
+# Explicitly registered documentation diagrams/plots, not a general image allowance.
 DOCUMENTATION_FIGURES = {
+    "docs/figures/fig01_pipeline.png": "3b75891fc2f738c4a36a4ba28cbb42eaad6c79f568126c1bcfce5f8486c421aa",
     "docs/figures/fig06d_rafdb_four_paths_two_fer.png": "beda1a4dcc6937e557ba486b4d3d85678fa646daf7117da895343c54c4d00255",
     "docs/figures/fig06e_rafdb_strong_utility_heatmap.png": "29383f7243b19ebc9160e8be297bf4be2e3506f40f4abcec5c4014e8d9b739c3",
 }

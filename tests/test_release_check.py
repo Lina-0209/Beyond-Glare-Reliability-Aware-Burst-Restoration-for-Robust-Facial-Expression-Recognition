@@ -1,4 +1,4 @@
-"""Only explicitly registered aggregate plots may enter the release tree."""
+"""Only explicitly registered documentation figures may enter the release tree."""
 from contextlib import redirect_stdout
 import hashlib
 import io
