@@ -43,15 +43,28 @@ over direct FER by **+2.37 / +2.66 percentage points** with enet_b2_7 and
 
 ## Pipeline
 
-![Four-frame RGB burst passes through landmark alignment, BERR restoration, local ROI composition, and a frozen seven-class FER recognizer.](docs/figures/fig01_pipeline.png)
+![BERR architecture: four-frame landmark alignment and ROI extraction, shared multi-scale encoding, pixel-wise reliability fusion, visible/prior decoding, and mask-guided local composition.](docs/figures/fig01_pipeline.svg)
 
-*BERR-enabled inference pipeline.* Four observations are aligned to an anchor,
-restored through shared encoding and reliability fusion, and locally composed
-before frozen FER. ROI reconstruction/composition is part of BERR, displayed as a
-separate logical stage. This figure shows the four-frame research path; the group's
-existing single-JPEG interface and the burst integration route are distinguished
+**BERR architecture for reliability-aware burst eyeglass-glare restoration.**
+**(a)** Four RGB observations are aligned to frame 0 using facial landmarks. The
+eyeglass regions are cropped, resized to 128 × 128, and encoded together with a
+geometry heatmap by a shared three-scale NAF-style encoder. A multi-scale decoder
+combines anchor and reliability-fused features to predict visible-evidence
+reconstruction *V* and prior reconstruction *P*.
+**(b)** A shared degradation head estimates per-frame logits. At each scale, resized
+logits produce pixel-wise frame weights through softmax with temperature τ = 0.15;
+weighted feature summation aggregates complementary observations. Sigmoid logits
+yield degradation masks *mₜ*.
+**(c)** The product mask *p* = ∏ₜ *mₜ* gates the mixture of *V* and *P*. The anchor
+mask *a* = *m₀* then blends this estimate with the aligned anchor ROI, followed by
+mask-conditioned, feathered pasting into the full anchor frame. Pixels outside the
+ROI remain unchanged. Feature sheets and weight maps are schematic; the final
+face thumbnails use the ground-truth image to illustrate the intended ideal
+restoration, rather than a measured model prediction.
+<!-- claim:C010 evidence:E005,E009; figure:docs/figures/fig01_pipeline.svg -->
+
+Downstream frozen FER and the platform integration boundary are described
 [below](#integration-into-the-group-learning-platform).
-<!-- claim:C010 evidence:E005,E008 -->
 
 ## Contributions
 
