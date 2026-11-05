@@ -23,7 +23,7 @@ not downloadable public assets. Hashes identify the exact records used here.
 | E006 | `outputs/final_validation_resplit/dataset_split.csv` | Per-domain and combined source/burst counts for every split. |
 | E007 | Original deployment adapter and project integration record (not bundled) | `emotion_service.py`: single-JPEG `POST /recognize`; `vision_module/group_emotion_adapter.py`: face crop, rejection, seven-to-five mapping and public response; `docs/PROJECT_OVERVIEW_CN.md` §11: backend responsibilities and the four-frame extension boundary. |
 | E008 | Earlier project pipeline diagram (retained historical asset) | `docs/figures/fig01_pipeline.png`; superseded in the READMEs by E009. |
-| E009 | BERR architecture schematic, revised 2026-11-04 | `docs/figures/fig01_pipeline.svg`; topology checked against E005. Embedded photographic tiles come from existing diagnostic sample `821_gpt_v00`; final face thumbnails use Ground Truth to illustrate ideal restoration. |
+| E009 | BERR architecture schematic, revised 2026-11-05 | `docs/figures/fig01_pipeline.svg`; topology checked against E005. Embedded photographic tiles come from existing diagnostic sample `5987_gpt_v00`; final face thumbnails use Ground Truth to illustrate ideal restoration. |
 
 ```text
 E001  0c14db58e6a3f4aca8cfbe8656c6413b52a060c234d44fbe56e6ce04958495da
@@ -35,7 +35,7 @@ E007 emotion_service.py  e8afedf999c92c96aff0772e747f4d5abeb1e1cbb6fe4b4896099e7
 E007 group_emotion_adapter.py  2a984fda8e3303410dd8b06882169aa388c47ddd6512ba21a25176e8772b9d6f
 E007 PROJECT_OVERVIEW_CN.md  3360bba2c63cb1b346f01d8180216a373de91965ad3453d55e43c154cc8ee569
 E008  3b75891fc2f738c4a36a4ba28cbb42eaad6c79f568126c1bcfce5f8486c421aa
-E009  0a43bfeb7ac32ac9b2ac85956fc7ea7682b5041b06c330142b22bd20d0dbf8dd
+E009  41d77efb6a8aaf0e2d22cf12ef6e464838e64eeca39a535bff99904ea0a0ec23
 ```
 
 | Claim | README section / purpose | Evidence |
@@ -133,23 +133,24 @@ resampling, or PDF export is performed for this README update.
 
 | Display | Bundled file | Version / encoding | SHA256 |
 |---|---|---|---|
-| Pipeline / BERR architecture | `figures/fig01_pipeline.svg` | Three-panel editable SVG; native vector architecture with embedded photographic/diagnostic images; final faces illustrate ideal restoration using Ground Truth | `0a43bfeb7ac32ac9b2ac85956fc7ea7682b5041b06c330142b22bd20d0dbf8dd` |
+| Pipeline / BERR architecture | `figures/fig01_pipeline.svg` | Three-panel editable SVG; native vector architecture with embedded photographic/diagnostic images; final faces illustrate ideal restoration using Ground Truth | `41d77efb6a8aaf0e2d22cf12ef6e464838e64eeca39a535bff99904ea0a0ec23` |
 | Figure 1 / project Fig. 6d | `figures/fig06d_rafdb_four_paths_two_fer.png` | Original four-path, dual-FER severity curves; point estimates with clean references | `beda1a4dcc6937e557ba486b4d3d85678fa646daf7117da895343c54c4d00255` |
 | Figure 2 / project Fig. 6e | `figures/fig06e_rafdb_strong_utility_heatmap.png` | User-approved 2026-10-29 blue revision; signed pp gains; independent panel scales | `29383f7243b19ebc9160e8be297bf4be2e3506f40f4abcec5c4014e8d9b739c3` |
 
-The README pipeline was replaced on 2026-11-04 at the project owner's request
-with a BERR architecture schematic checked against commit
+The README pipeline was replaced on 2026-11-04 and its example revised on
+2026-11-05 at the project owner's request, using a BERR architecture schematic
+checked against commit
 `ad76b408a8b1130f70d9253d14a765e67f5e380d`. Panels (a)-(c) show the architecture,
 pixel-wise reliability fusion, and mask-guided local composition. Downstream FER
 and platform integration are outside this figure.
 
 Photographic tiles are embedded from the existing validation diagnostic
-`821_gpt_v00` (epoch 57, step 20862), which uses synthetic glare on a photographic
+`5987_gpt_v00` (epoch 57, step 20862), which uses synthetic glare on a photographic
 face. Only input frame 0 is shown; rear sheets indicate the frame dimension.
 The displayed anchor crop is taken directly from full-frame pixels. Its
-illustrative rectangle was matched to the exported anchor ROI; the original bbox
-metadata was unavailable locally. Normalized prior/restored ROIs are reprojected
-into this rectangle for display. Network preprocessing still resizes crops to
+191 × 59 image-space rectangle (x=30, y=98) is recorded in project metadata
+`000005_hq5987_b0.json`; matching the exported anchor ROI confirms the crop.
+Normalized prior/restored ROIs are reprojected into this rectangle for display. Network preprocessing still resizes crops to
 128 × 128. Feature sheets and weight maps are schematic; V and S thumbnails are
 RGB symbols because their images were not exported. The two final face thumbnails
 use Ground Truth to illustrate the intended ideal restoration, not an observed
